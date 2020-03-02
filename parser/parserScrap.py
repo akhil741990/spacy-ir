@@ -129,3 +129,59 @@ people = [ee for ee in testNlp.ents if ee.label_ == 'PERSON']
 
 print(people)
 
+
+#Summarization
+
+from spacy.lang.en.stop_words import STOP_WORDS
+from string import punctuation
+stopwords = list(STOP_WORDS)
+
+
+word_frequencies = {}
+for doc in testNlp:
+    if doc.text not in stopwords:
+        if doc.text not in word_frequencies.keys():
+            word_frequencies[doc.text] = 1
+        else:    
+            word_frequencies[doc.text] += 1
+
+print(word_frequencies)
+maximum_frequency = max(word_frequencies.values())
+print(maximum_frequency)
+
+
+for word in word_frequencies.keys():
+    word_frequencies[word] =  word_frequencies[word]/maximum_frequency
+    
+  
+print(word_frequencies)  
+    
+    
+sentences = [sentence for sentence in testNlp.sents]
+
+sentence_sores = {}
+for sent in sentences:
+    for wordNew in sent:
+        if wordNew.text.lower() in word_frequencies.keys():
+            if len(sent.text.split(' ')) < 30:
+                if sent not in sentence_sores.keys():
+                   sentence_sores[sent] = word_frequencies[wordNew.text.lower()]
+                else:
+                   sentence_sores[sent] += word_frequencies[wordNew.text.lower()]    
+                   
+                   
+for sent in sentence_sores.keys():
+    print(sent)
+    print(sentence_sores[sent])                   
+                                  
+    
+from heapq import nlargest
+
+summarized_sentences = nlargest(7, sentence_sores, key=sentence_sores.get)
+
+print(summarized_sentences)
+
+
+
+
+
