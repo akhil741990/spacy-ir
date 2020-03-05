@@ -8,4 +8,5 @@ Created on 03-Mar-2020
 def getText(file):
     with open(file, 'r') as file:
         data = file.read().replace('\n', ' ')
+        data = data.replace('|', '')
     return data

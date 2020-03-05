@@ -6,7 +6,11 @@ Created on 03-Mar-2020
 from  summerizer.textSummarizer import summarize
 from  reader.pdfReader import extract_text_from_pdf
 from  reader.textReader import getText
+import csv
+from os import listdir
+from os.path import isfile, join
 
+'''
 text = extract_text_from_pdf('/home/akhil/devTools/spark-2.4.4-bin-hadoop2.7/housingData/resume.pdf')
 
 tokens = ""
@@ -22,10 +26,23 @@ toks = ' '.join(tokens.split())
 summ = summarize(toks)
 
 #print(summ)
+'''
 
 
-text = getText('/home/akhil/devTools/spark-2.4.4-bin-hadoop2.7/housingData/jobPosting/jobPostig4.txt')
-print("Input :" + text)
+jobPostingDir = '/home/akhil/devTools/spark-2.4.4-bin-hadoop2.7/housingData/jobPosting/'
 
-summ = summarize(text)
-print(summ)
+
+files = [join(jobPostingDir,f) for f in listdir(jobPostingDir) if isfile(join(jobPostingDir,f))]
+
+for file in files:
+    print("fileName :" + file)
+    text = getText(file)
+    print("Input :" + text)    
+    summ = summarize(text)
+    strSumm = ' '.join(str(e) for e in summ)
+    print(strSumm)    
+    with open('/home/akhil/devTools/spark-2.4.4-bin-hadoop2.7/housingData/jobPostingProcessed/data.csv','a') as fd:
+        newFileWriter = csv.writer(fd)
+        newFileWriter.writerow([text ,strSumm])
+
+
