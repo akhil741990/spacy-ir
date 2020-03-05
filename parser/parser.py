@@ -109,11 +109,20 @@ toks = ' '.join(tokens.split())
 nlp = spacy.load("en_core_web_sm")
 testNlp = nlp(toks)
 
+
+for tok in testNlp:
+    print(f'Token : {tok}, POS :{tok.pos_}')
+
+
+
+
+
 nouns = ""
 for n in testNlp.noun_chunks:
+    print(f'Noun : {n.text.lower().strip()}')
     nouns = nouns + ' ' + n.text.lower().strip()
 
-
+'''
 print(list(testNlp.noun_chunks))
 
 
@@ -129,3 +138,4 @@ for idx, sentence in enumerate(testNlp.sents):
     for noun in sentence.noun_chunks:
         print(f'sentence: {sentence}  ---> has noun chunc {noun}')
 
+'''
